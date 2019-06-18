@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "122681094275",
+    "firebase_url": "https://pusher-d0cd2.firebaseio.com",
+    "project_id": "pusher-d0cd2",
+    "storage_bucket": "pusher-d0cd2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122681094275:android:9386558b6d1ae9a4",
+        "android_client_info": {
+          "package_name": "com.example.pusher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "122681094275-6opsmnpa0d2mnp4ftq40mt0ie8d2tqqm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDskeorDAjETRxwdxljH6Pnj_sKaZfLXw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "122681094275-6opsmnpa0d2mnp4ftq40mt0ie8d2tqqm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
