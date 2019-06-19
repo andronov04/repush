@@ -68,32 +68,14 @@ class LoginState extends State<LoginPage> {
       ),
     );
 
-//    final logoutButton = Container(
-//      padding: EdgeInsets.all(10.0),
-//      child: FlatButton(
-//        color: Colors.white,
-//        onPressed: () {
-//          signOut();
-//        },
-//        child: Text(
-//          "Sign Out",
-//          style: TextStyle(color: Colors.black),
-//        ),
-//      ),
-//    );
-
     return Scaffold(
       backgroundColor: Colors.lightBlue,
-//      appBar: AppBar(
-//        title: Text("RePush Login"),
-//      ),
       body: Center(
         child: ListView(
           shrinkWrap: true,
           padding: EdgeInsets.all(10.0),
           children: <Widget>[
             loginbutton,
-//            logoutButton,
           ],
         ),
       ),
@@ -112,15 +94,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightBlue,
-//      appBar: AppBar(
-//        title: Text("RePush"),
-//      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text("${user.uid}"),
-            Text("${user.displayName}"),
             Text("${user.isAnonymous}")
           ],
         ),
