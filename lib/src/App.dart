@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'dart:async';
 
 class MyApp extends StatelessWidget {
@@ -83,12 +84,97 @@ class LoginState extends State<LoginPage> {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   static final String route = "home-page";
 
   final FirebaseUser user;
 
   HomePage({this.user});
+
+  @override
+  _PushMessagingExampleState createState() => _PushMessagingExampleState();
+
+}
+
+class _PushMessagingExampleState extends State<HomePage> {
+  String _homeScreenText = "Waiting for token...";
+  bool _topicButtonsDisabled = false;
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final TextEditingController _topicController =
+  TextEditingController(text: 'topic');
+
+//  Widget _buildDialog(BuildContext context, Item item) {
+//    return AlertDialog(
+//      content: Text("Item ${item.itemId} has been updated"),
+//      actions: <Widget>[
+//        FlatButton(
+//          child: const Text('CLOSE'),
+//          onPressed: () {
+//            Navigator.pop(context, false);
+//          },
+//        ),
+//        FlatButton(
+//          child: const Text('SHOW'),
+//          onPressed: () {
+//            Navigator.pop(context, true);
+//          },
+//        ),
+//      ],
+//    );
+//  }
+
+//  void _showItemDialog(Map<String, dynamic> message) {
+//    showDialog<bool>(
+//      context: context,
+//      builder: (_) => _buildDialog(context, _itemForMessage(message)),
+//    ).then((bool shouldNavigate) {
+//      if (shouldNavigate == true) {
+//        _navigateToItemDetail(message);
+//      }
+//    });
+//  }
+//
+//  void _navigateToItemDetail(Map<String, dynamic> message) {
+//    final Item item = _itemForMessage(message);
+//    // Clear away dialogs
+//    Navigator.popUntil(context, (Route<dynamic> route) => route is PageRoute);
+//    if (!item.route.isCurrent) {
+//      Navigator.push(context, item.route);
+//    }
+//  }
+
+  @override
+  void initState() {
+    super.initState();
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+//        _showItemDialog(message);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+//        _navigateToItemDetail(message);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+//        _navigateToItemDetail(message);
+      },
+    );
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+    _firebaseMessaging.getToken().then((String token) {
+      assert(token != null);
+      setState(() {
+        _homeScreenText = "Push Messaging token: $token";
+      });
+      print(_homeScreenText);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,11 +184,17 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("${user.uid}"),
-            Text("${user.isAnonymous}")
+            Text("It's working!")
           ],
         ),
       ),
     );
+  }
+
+  void _clearTopicText() {
+    setState(() {
+      _topicController.text = "";
+      _topicButtonsDisabled = true;
+    });
   }
 }
