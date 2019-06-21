@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 import 'dart:async';
 
 class MyApp extends StatelessWidget {
@@ -8,6 +12,9 @@ class MyApp extends StatelessWidget {
     LoginPage.route: (BuildContext context) => LoginPage(),
     HomePage.route: (BuildContext context) => HomePage(),
   };
+
+  MyApp({this.firestore});
+  final Firestore firestore;
 
   @override
   Widget build(BuildContext context) {
@@ -98,55 +105,37 @@ class HomePage extends StatefulWidget {
 
 class _PushMessagingExampleState extends State<HomePage> {
   String _homeScreenText = "Waiting for token...";
-  bool _topicButtonsDisabled = false;
 
+  final FirebaseDatabase _firebaseDatabase = FirebaseDatabase();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  final TextEditingController _topicController =
-  TextEditingController(text: 'topic');
 
-//  Widget _buildDialog(BuildContext context, Item item) {
-//    return AlertDialog(
-//      content: Text("Item ${item.itemId} has been updated"),
-//      actions: <Widget>[
-//        FlatButton(
-//          child: const Text('CLOSE'),
-//          onPressed: () {
-//            Navigator.pop(context, false);
-//          },
-//        ),
-//        FlatButton(
-//          child: const Text('SHOW'),
-//          onPressed: () {
-//            Navigator.pop(context, true);
-//          },
-//        ),
-//      ],
-//    );
-//  }
-
-//  void _showItemDialog(Map<String, dynamic> message) {
-//    showDialog<bool>(
-//      context: context,
-//      builder: (_) => _buildDialog(context, _itemForMessage(message)),
-//    ).then((bool shouldNavigate) {
-//      if (shouldNavigate == true) {
-//        _navigateToItemDetail(message);
-//      }
+//  CollectionReference get messages => widget.firestore.collection('messages');
+//
+//  Future<void> _addMessage() async {
+//    await messages.add(<String, dynamic>{
+//      'message': 'Hello world!',
+//      'created_at': FieldValue.serverTimestamp(),
 //    });
 //  }
-//
-//  void _navigateToItemDetail(Map<String, dynamic> message) {
-//    final Item item = _itemForMessage(message);
-//    // Clear away dialogs
-//    Navigator.popUntil(context, (Route<dynamic> route) => route is PageRoute);
-//    if (!item.route.isCurrent) {
-//      Navigator.push(context, item.route);
-//    }
-//  }
+
+  void createMessage()  {
+    print('CreateMSG');
+    Firestore.instance.collection('messages').document()
+        .setData({ 'title': 'title', 'author': 'author' });
+
+    _firebaseDatabase.reference().child('messages').child('id')
+        .set({
+      'title': 'Realtime db rocksssss',
+    });
+  }
+
 
   @override
   void initState() {
     super.initState();
+
+    createMessage();
+
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
@@ -174,6 +163,9 @@ class _PushMessagingExampleState extends State<HomePage> {
       });
       print(_homeScreenText);
     });
+
+    _firebaseMessaging.subscribeToTopic("ios");
+
   }
 
   @override
@@ -189,12 +181,5 @@ class _PushMessagingExampleState extends State<HomePage> {
         ),
       ),
     );
-  }
-
-  void _clearTopicText() {
-    setState(() {
-      _topicController.text = "";
-      _topicButtonsDisabled = true;
-    });
   }
 }
