@@ -118,15 +118,15 @@ class _PushMessagingExampleState extends State<HomePage> {
 //    });
 //  }
 
-  void createMessage()  {
-    print('CreateMSG');
-    Firestore.instance.collection('messages').document()
-        .setData({ 'title': 'title', 'author': 'author' });
+  void createUserIfNotExists()  {
+    print('Create user');
+    Firestore.instance.collection('users').document(widget.user.uid)
+        .setData({ 'uid': widget.user.uid});
 
-    _firebaseDatabase.reference().child('messages').child('id')
-        .set({
-      'title': 'Realtime db rocksssss',
-    });
+//    _firebaseDatabase.reference().child('messages').child('id')
+//        .set({
+//      'title': 'Realtime db rocksssss',
+//    });
   }
 
 
@@ -134,7 +134,7 @@ class _PushMessagingExampleState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    createMessage();
+    createUserIfNotExists();
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
@@ -155,16 +155,20 @@ class _PushMessagingExampleState extends State<HomePage> {
     _firebaseMessaging.onIosSettingsRegistered
         .listen((IosNotificationSettings settings) {
       print("Settings registered: $settings");
+
+      _firebaseMessaging.subscribeToTopic("ios");
+      print('subscirebd');
     });
     _firebaseMessaging.getToken().then((String token) {
       assert(token != null);
       setState(() {
         _homeScreenText = "Push Messaging token: $token";
+        // TODO add token to user in firestore and update token
       });
       print(_homeScreenText);
     });
 
-    _firebaseMessaging.subscribeToTopic("ios");
+
 
   }
 
@@ -176,10 +180,39 @@ class _PushMessagingExampleState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("It's working!")
+            UserInfo(user: widget.user),
+//            Text("It's working!"),
+//            Text("${widget.user.uid}")
           ],
         ),
       ),
+    );
+  }
+}
+
+
+class UserInfo extends StatelessWidget {
+
+  final Firestore firestore = Firestore.instance;
+  final FirebaseUser user;
+
+  UserInfo({this.user});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<DocumentSnapshot>(
+      stream: firestore.collection('users').document(user.uid).snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (!snapshot.hasData)
+          return Text('Loading...');
+        switch (snapshot.connectionState) {
+          case ConnectionState.none: return Text('Select lot');
+          case ConnectionState.waiting: return Text('Awaiting bids...');
+          case ConnectionState.active: return Text('YOUR ID: ${snapshot.data['nickUid']}  ');
+          case ConnectionState.done: return Text('\$${snapshot.data} (closed)');
+        }
+        return null; // unreachable
+      },
     );
   }
 }
