@@ -118,10 +118,10 @@ class _PushMessagingExampleState extends State<HomePage> {
 //    });
 //  }
 
-  void createUserIfNotExists()  {
+  Future<void> createUserIfNotExists()  async{
     print('Create user');
-    Firestore.instance.collection('users').document(widget.user.uid)
-        .setData({ 'uid': widget.user.uid});
+//    Firestore.instance.collection('users').document(widget.user.uid)
+//        .setData({ 'uid': widget.user.uid});
 
 //    _firebaseDatabase.reference().child('messages').child('id')
 //        .set({
@@ -176,16 +176,65 @@ class _PushMessagingExampleState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightBlue,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            UserInfo(user: widget.user),
-//            Text("It's working!"),
-//            Text("${widget.user.uid}")
-          ],
-        ),
+      body: Stack(
+        children:[
+          Positioned(
+            left: 35,
+            top: 50,
+            height: 50,
+            child: new Container(
+              width: 150.0,
+              child: UserInfo(user: widget.user)
+            ),
+          ),
+          new Container(
+            width: MediaQuery.of(context).size.width,
+//            margin: EdgeInsets.only(left:10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+//                            UserInfo(user: widget.user),
+                PushText(),
+                Text("It's working!"),
+                Text("${widget.user.uid}")
+              ],
+            ),
+          )
+
+        ]
       ),
+    );
+  }
+}
+
+class PushText extends StatefulWidget {
+
+  @override
+  _PushTextState createState() => _PushTextState();
+}
+
+class _PushTextState extends State<PushText> {
+  String results = "";
+
+  final TextEditingController controller = new TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return new Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        new TextField(
+          decoration: new InputDecoration(hintText: "Enter text here..."),
+          onSubmitted: (String str) {
+            setState(() {
+              results = results + "\n" + str;
+              controller.text = "";
+            });
+          },
+          controller: controller,
+        ),
+        new Text(results)
+      ],
     );
   }
 }
