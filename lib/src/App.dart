@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'RePush',
       theme: ThemeData.light(),
-//      home: LoginPage(),
-      home: TestPage(),
+      home: LoginPage(),
+//      home: TestPage(),
       routes: routes,
     );
   }
@@ -32,11 +32,11 @@ class MyApp extends StatelessWidget {
 class TestPage extends StatelessWidget {
 
   final topBar = new AppBar(
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.black,
     centerTitle: true,
     elevation: 1.0,
     leading: new Icon(Icons.notifications_none),
-    title: Text('Repush'),
+    title: Text('#'),
     actions: <Widget>[
       Padding(
         padding: const EdgeInsets.only(right: 12.0),
@@ -71,35 +71,55 @@ class TestPage extends StatelessWidget {
 //            ),
 
             new Container(
-              padding: EdgeInsets.all(10.0),
-              height: 100.0,
+              margin: EdgeInsets.only(left: 35.0, right: 35.0, top: 15.0),
+//              height: 20.0,
               color: Colors.transparent,
               child: new Container(
-                  decoration: new BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: new BorderRadius.all(Radius.circular(8.0))),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      left: BorderSide( //                   <--- left side
+                        color: Colors.redAccent,
+                        width: 5.0,
+                      ),
+                    ),
+                  ),
                   child: new Center(
                     child:
                     new ListTile(
-                        title: Text('@stevejobs'),
-                        trailing: FlatButton(
-                          color: Colors.lightBlue,
-                          textColor: Colors.white,
-                          child: Text('PUSH'),
-                          onPressed: () {},
-                        ),
-                        subtitle: TextField(
-                          decoration: InputDecoration(
-                              hintText: 'Hi dude!'
+//                        contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                        title: Text(
+                          '5678',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontFamily: 'Arial',
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
+                        trailing: FlatButton(
+                          child: Text(
+                            'PUSH',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontFamily: 'Arial',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          textColor: Colors.white,
+                          color: Colors.redAccent,
+                          shape:
+                          RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+                          onPressed: () {
+
+                          },
+                        ),
+                      subtitle: Text('Last 12 minutes ago'),
                     ),
                   )),
             ),
 
-            new Divider(
-              height: 1.0,
-            ),
+//            new Divider(
+//              height: 1.0,
+//            ),
 
           ],
         )
@@ -190,6 +210,9 @@ class _PushMessagingExampleState extends State<HomePage> {
 
   final FirebaseDatabase _firebaseDatabase = FirebaseDatabase();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final Firestore firestore = Firestore.instance;
+
+  DocumentSnapshot currentUser;
 
 //  CollectionReference get messages => widget.firestore.collection('messages');
 //
@@ -257,25 +280,32 @@ class _PushMessagingExampleState extends State<HomePage> {
       print(_homeScreenText);
     });
 
+//    currentUser = firestore.collection('users').document(user.uid).snapshots();
+
 
 
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightBlue,
+      appBar: new AppBar(
+        backgroundColor: Colors.black,
+        centerTitle: true,
+        elevation: 1.0,
+        leading: UserInfo(user: widget.user),
+        title: Text(''),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: Icon(Icons.add_circle_outline),
+          )
+        ],
+      ),
+      backgroundColor: Colors.white,
       body: Stack(
         children:[
-          Positioned(
-            left: 35,
-            top: 50,
-            height: 50,
-            child: new Container(
-              width: 150.0,
-              child: UserInfo(user: widget.user)
-            ),
-          ),
           new Container(
             width: MediaQuery.of(context).size.width,
 //            margin: EdgeInsets.only(left:10.0),
@@ -367,41 +397,11 @@ class UserInfo extends StatelessWidget {
 
 class Chat extends StatelessWidget {
 
-  final Firestore firestore = Firestore.instance;
+//  final Firestore firestore = Firestore.instance;
   final FirebaseUser user;
 
   Chat({this.user});
 
-  Widget _buildChatItem(BuildContext context, DocumentSnapshot document) {
-    return ListTile(
-      leading: CircleAvatar(
-        radius: 30.0,
-        foregroundColor: Theme.of(context).primaryColor,
-        backgroundColor: Colors.grey,
-        backgroundImage: NetworkImage(document['avatarUrl']),
-      ),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            document['name'],
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text(
-            document['time'],
-            style: TextStyle(color: Colors.grey, fontSize: 14.0),
-          ),
-        ],
-      ),
-      subtitle: Container(
-        padding: const EdgeInsets.only(top: 5.0),
-        child: Text(
-          document['message'],
-          style: TextStyle(color: Colors.grey, fontSize: 15.0),
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -409,24 +409,200 @@ class Chat extends StatelessWidget {
       stream: Firestore.instance.collection('chats').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const CircularProgressIndicator();
+        print(snapshot.data.documents);
         return ListView.builder(
             itemCount: snapshot.data.documents.length,
             itemBuilder: (context, index) => Column(
               children: <Widget>[
-                index == 0
-                    ? Container()
-                    : Divider(
-                  height: 10.0,
-                ),
-                _buildChatItem(context, snapshot.data.documents[index]),
-                index == snapshot.data.documents.length-1
-                    ? Divider(
-                  height: 10.0,
-                )
-                    : Container(),
+//                index == 0
+//                    ? Container()
+//                    : Divider(
+//                  height: 10.0,
+//                ),
+//                _buildChatItem(context, snapshot.data.documents[index]),
+                ChatItem(document: snapshot.data.documents[index], user: user),
+//                index == snapshot.data.documents.length-1
+//                    ? Divider(
+//                  height: 10.0,
+//                )
+//                    : Container(),
               ],
             ));
       },
     );
+  }
+}
+
+
+class ChatItem extends StatefulWidget {
+  DocumentSnapshot document;
+  FirebaseUser user;
+
+  ChatItem({this.document, this.user});
+
+  @override
+  _ChatItemState createState() => _ChatItemState();
+}
+
+class _ChatItemState extends State<ChatItem> {
+  String text = '';
+  bool isFocus = true;
+
+  final Firestore firestore = Firestore.instance;
+  final TextEditingController controller = new TextEditingController();
+
+  Future<void> createMessage()  async{
+    print('Create message');
+
+    firestore.collection('messages').document().setData({
+      'text': controller.text,
+      'chatRef': widget.document.reference,
+      'creatorID': widget.user.uid,
+      'created_at': FieldValue.serverTimestamp(),
+    });
+
+    controller.text = '';
+  }
+
+  Widget build(BuildContext context) {
+
+    return new Container(
+      margin: EdgeInsets.only(
+        left: 20.0,
+        right: 20.0,
+        top: 20.0
+      ),
+      child: new Container(
+        width: MediaQuery.of(context).size.width,
+        height: 40.0,
+//        height: MediaQuery.of(context).size.height,
+
+        child: new Material(
+//          borderRadius: BorderRadius.circular(100.0),
+          child: new Container(
+            decoration: BoxDecoration(
+              color: isFocus ? Colors.blueAccent.withOpacity(0.25) : null,
+              border: Border.all(
+                  width: 2.0,
+                  color: Colors.blueAccent.withOpacity(isFocus ? 0.0 : 0.35)
+              ),
+              borderRadius: BorderRadius.all(
+                  Radius.circular(150.0) //         <--- border radius here
+              ),
+            ),
+            child: new Container(
+              padding: EdgeInsets.all(2.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  new Container(
+                    width: 200.0,
+                    child: TextField(
+                      onTap: (){
+//                        setState(() {
+//                          isFocus = !isFocus;
+//                        });
+                      },
+                      decoration: new InputDecoration(
+                        contentPadding: EdgeInsets.only(left: 10.0),
+                        hintText: "Type a message",
+                        border: InputBorder.none,
+                      ),
+                      onSubmitted: (String str) {
+                        print(str);
+                        text += str;
+                      },
+                      controller: controller,
+                    ),
+                  ),
+                  FlatButton(
+                    child: Text(
+                      'PUSH',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontFamily: 'Arial',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    textColor: Colors.white,
+                    color: Colors.blueAccent,
+                    shape:
+                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+                    onPressed: () {
+                      print(text);
+//                      this.createMessage();
+//                controller.text = '';
+                    },
+                  ),
+                ],
+              ),
+            )
+          ),
+        ),
+      ),
+    );
+
+    return new Container(
+        decoration: BoxDecoration(
+          border: Border(
+            left: BorderSide( //                   <--- left side
+              color: Colors.redAccent,
+              width: 5.0,
+            ),
+          ),
+        ),
+        child: new Center(
+          child:
+          new ListTile(
+            title:
+            StreamBuilder(
+              stream: widget.document['from'].snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return const CircularProgressIndicator();
+                return Text(
+                  '${snapshot.data['nickUid'].toString()}',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontFamily: 'Arial',
+                    fontWeight: FontWeight.w600,
+                  ),
+                );
+              },
+            )
+            ,
+            trailing: FlatButton(
+              child: Text(
+                'PUSH',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontFamily: 'Arial',
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              textColor: Colors.white,
+              color: Colors.redAccent,
+              shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+              onPressed: () {
+                print(text);
+                this.createMessage();
+//                controller.text = '';
+              },
+            ),
+            subtitle: Column(
+              children: <Widget>[
+//                Text(widget.document.documentID),
+                TextField(
+                  decoration: new InputDecoration(hintText: "Enter text here..."),
+                  onSubmitted: (String str) {
+                    print(str);
+                    text += str;
+                  },
+                  controller: controller,
+                )
+              ],
+            ),
+          ),
+        ));
   }
 }
