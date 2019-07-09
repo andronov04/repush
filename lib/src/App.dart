@@ -20,9 +20,91 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'RePush',
-      theme: ThemeData.dark(),
-      home: LoginPage(),
+      theme: ThemeData.light(),
+//      home: LoginPage(),
+      home: TestPage(),
       routes: routes,
+    );
+  }
+}
+
+
+class TestPage extends StatelessWidget {
+
+  final topBar = new AppBar(
+    backgroundColor: Colors.white,
+    centerTitle: true,
+    elevation: 1.0,
+    leading: new Icon(Icons.notifications_none),
+    title: Text('Repush'),
+    actions: <Widget>[
+      Padding(
+        padding: const EdgeInsets.only(right: 12.0),
+        child: Icon(Icons.add_circle_outline),
+      )
+    ],
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: topBar,
+        body: new Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+//            new ListTile(
+//              title: Text('@stevejobs'),
+//              trailing: FlatButton(
+//                color: Colors.lightBlue,
+//                textColor: Colors.white,
+//                child: Text('PUSH'),
+//                onPressed: () {},
+//              ),
+//              subtitle: TextField(
+//                decoration: InputDecoration(
+//                    hintText: 'Hi dude!'
+//                ),
+//              ),
+//            ),
+
+            new Container(
+              padding: EdgeInsets.all(10.0),
+              height: 100.0,
+              color: Colors.transparent,
+              child: new Container(
+                  decoration: new BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: new BorderRadius.all(Radius.circular(8.0))),
+                  child: new Center(
+                    child:
+                    new ListTile(
+                        title: Text('@stevejobs'),
+                        trailing: FlatButton(
+                          color: Colors.lightBlue,
+                          textColor: Colors.white,
+                          child: Text('PUSH'),
+                          onPressed: () {},
+                        ),
+                        subtitle: TextField(
+                          decoration: InputDecoration(
+                              hintText: 'Hi dude!'
+                          ),
+                        ),
+                    ),
+                  )),
+            ),
+
+            new Divider(
+              height: 1.0,
+            ),
+
+          ],
+        )
+      )
+
     );
   }
 }
@@ -129,12 +211,11 @@ class _PushMessagingExampleState extends State<HomePage> {
 //    });
   }
 
-
   @override
   void initState() {
     super.initState();
 
-    createUserIfNotExists();
+//    createUserIfNotExists();
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
@@ -163,7 +244,15 @@ class _PushMessagingExampleState extends State<HomePage> {
       assert(token != null);
       setState(() {
         _homeScreenText = "Push Messaging token: $token";
-        // TODO add token to user in firestore and update token
+
+
+        Firestore.instance
+            .collection('tokens')
+            .document(widget.user.uid)
+            .setData({
+              'token': token,
+              'createdAt': FieldValue.serverTimestamp(), // optional
+            });
       });
       print(_homeScreenText);
     });
@@ -190,15 +279,17 @@ class _PushMessagingExampleState extends State<HomePage> {
           new Container(
             width: MediaQuery.of(context).size.width,
 //            margin: EdgeInsets.only(left:10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-//                            UserInfo(user: widget.user),
-                PushText(),
-                Text("It's working!"),
-                Text("${widget.user.uid}")
-              ],
-            ),
+            child:
+            Chat(user: widget.user),
+//            Column(
+//              mainAxisAlignment: MainAxisAlignment.center,
+//              children: <Widget>[
+//                Chat(user: widget.user),
+////                PushText(),
+////                Text("It's working!"),
+////                Text("${widget.user.uid}")
+//              ],
+//            ),
           )
 
         ]
@@ -217,6 +308,13 @@ class _PushTextState extends State<PushText> {
   String results = "";
 
   final TextEditingController controller = new TextEditingController();
+  final Firestore firestore = Firestore.instance;
+
+  Future<void> createMessage(String text)  async{
+    print('Create message');
+
+     firestore.collection('messages').document().setData({ 'text': text});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,6 +324,7 @@ class _PushTextState extends State<PushText> {
         new TextField(
           decoration: new InputDecoration(hintText: "Enter text here..."),
           onSubmitted: (String str) {
+            this.createMessage(controller.text);
             setState(() {
               results = results + "\n" + str;
               controller.text = "";
@@ -261,6 +360,72 @@ class UserInfo extends StatelessWidget {
           case ConnectionState.done: return Text('\$${snapshot.data} (closed)');
         }
         return null; // unreachable
+      },
+    );
+  }
+}
+
+class Chat extends StatelessWidget {
+
+  final Firestore firestore = Firestore.instance;
+  final FirebaseUser user;
+
+  Chat({this.user});
+
+  Widget _buildChatItem(BuildContext context, DocumentSnapshot document) {
+    return ListTile(
+      leading: CircleAvatar(
+        radius: 30.0,
+        foregroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Colors.grey,
+        backgroundImage: NetworkImage(document['avatarUrl']),
+      ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            document['name'],
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Text(
+            document['time'],
+            style: TextStyle(color: Colors.grey, fontSize: 14.0),
+          ),
+        ],
+      ),
+      subtitle: Container(
+        padding: const EdgeInsets.only(top: 5.0),
+        child: Text(
+          document['message'],
+          style: TextStyle(color: Colors.grey, fontSize: 15.0),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: Firestore.instance.collection('chats').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const CircularProgressIndicator();
+        return ListView.builder(
+            itemCount: snapshot.data.documents.length,
+            itemBuilder: (context, index) => Column(
+              children: <Widget>[
+                index == 0
+                    ? Container()
+                    : Divider(
+                  height: 10.0,
+                ),
+                _buildChatItem(context, snapshot.data.documents[index]),
+                index == snapshot.data.documents.length-1
+                    ? Divider(
+                  height: 10.0,
+                )
+                    : Container(),
+              ],
+            ));
       },
     );
   }
