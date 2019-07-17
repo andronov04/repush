@@ -17,19 +17,19 @@ class ChatList extends StatefulWidget {
 
 class ChatListState extends State<ChatList>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+//  TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
-    _tabController.addListener(_handleTabIndex);
+//    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
+//    _tabController.addListener(_handleTabIndex);
   }
 
   @override
   void dispose() {
-    _tabController.removeListener(_handleTabIndex);
-    _tabController.dispose();
+//    _tabController.removeListener(_handleTabIndex);
+//    _tabController.dispose();
     super.dispose();
   }
 
@@ -40,46 +40,39 @@ class ChatListState extends State<ChatList>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          StringConstant.goalListTitle,
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        backgroundColor: Colors.amber,
-        elevation: 0.0,
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: <Tab>[
-            Tab(text: StringConstant.worldTab),
-            Tab(text: StringConstant.myTab),
-          ],
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: <Widget>[
-//          PeopleChatListScreen(),
-//          MyChatListScreen(widget._emailAddress),
-        ],
-      ),
-      floatingActionButton: _bottomButtons(),
+//      appBar: AppBar(
+//        title: Text(
+//          StringConstant.goalListTitle,
+//          style: TextStyle(
+//            color: Colors.black,
+//          ),
+//        ),
+//        backgroundColor: Colors.amber,
+//        elevation: 0.0,
+//        bottom: TabBar(
+//          controller: _tabController,
+//          tabs: <Tab>[
+//            Tab(text: StringConstant.worldTab),
+//            Tab(text: StringConstant.myTab),
+//          ],
+//        ),
+//      ),
+      body: Text('test'),
     );
   }
 
-  Widget _bottomButtons() {
-    if (_tabController.index == 1) {
-//      return FloatingActionButton(
-//          child: Icon(Icons.add),
-//          onPressed: () {
-//            Navigator.push(
-//                context,
-//                MaterialPageRoute(
-//                    builder: (context) => AddGoalScreen(widget._emailAddress)));
-//          });
-    } else {
-      return null;
-    }
-  }
+//  Widget _bottomButtons() {
+//    if (_tabController.index == 1) {
+////      return FloatingActionButton(
+////          child: Icon(Icons.add),
+////          onPressed: () {
+////            Navigator.push(
+////                context,
+////                MaterialPageRoute(
+////                    builder: (context) => AddGoalScreen(widget._emailAddress)));
+////          });
+//    } else {
+//      return null;
+//    }
+//  }
 }

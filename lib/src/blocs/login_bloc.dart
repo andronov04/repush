@@ -45,7 +45,7 @@ class LoginBloc {
       });
 
   Future<int> submit() {
-    return _repository.authenticateUser(_email.value, _password.value);
+    return _repository.authenticateUser();
   }
 
   Future<void> registerUser() {

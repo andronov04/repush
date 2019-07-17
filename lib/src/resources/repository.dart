@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'firestore_provider.dart';
+import 'fireauth_provider.dart';
 
 class Repository {
   final _firestoreProvider = FirestoreProvider();
+  final _fireauthProvider = FireauthProvider();
 
-  Future<int> authenticateUser(String email, String password) =>
-      _firestoreProvider.authenticateUser(email, password);
+  Future<int> authenticateUser() =>
+      _fireauthProvider.authenticateUser();
 
   Future<void> registerUser(String email, String password) =>
       _firestoreProvider.registerUser(email, password);

@@ -30,40 +30,12 @@ class SignInFormState extends State<SignInForm> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        emailField(),
-        Container(margin: EdgeInsets.only(top: 5.0, bottom: 5.0)),
-        passwordField(),
         Container(margin: EdgeInsets.only(top: 5.0, bottom: 5.0)),
         submitButton()
       ],
     );
   }
 
-  Widget passwordField() {
-    return StreamBuilder(
-        stream: _bloc.password,
-        builder: (context, AsyncSnapshot<String> snapshot) {
-          return TextField(
-            onChanged: _bloc.changePassword,
-            obscureText: true,
-            decoration: InputDecoration(
-                hintText: StringConstant.passwordHint,
-                errorText: snapshot.error),
-          );
-        });
-  }
-
-  Widget emailField() {
-    return StreamBuilder(
-        stream: _bloc.email,
-        builder: (context, snapshot) {
-          return TextField(
-            onChanged: _bloc.changeEmail,
-            decoration: InputDecoration(
-                hintText: StringConstant.emailHint, errorText: snapshot.error),
-          );
-        });
-  }
 
   Widget submitButton() {
     return StreamBuilder(
@@ -85,11 +57,7 @@ class SignInFormState extends State<SignInForm> {
         shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(30.0)),
         onPressed: () {
-          if (_bloc.validateFields()) {
-            authenticateUser();
-          } else {
-            showErrorMessage();
-          }
+          authenticateUser();
         });
   }
 
