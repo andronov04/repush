@@ -3,10 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 class FireauthProvider {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
-  Future<int> authenticateUser() async { //FirebaseUser
+  Future<String> authenticateUser() async { //FirebaseUser
     FirebaseUser user = await firebaseAuth.signInAnonymously();
     print("Signed in ${user.uid}");
-    return 1;
+    return user.uid;
   }
 
   Future<int> authenticateUserOld(String email, String password) async {

@@ -7,7 +7,7 @@ class Repository {
   final _firestoreProvider = FirestoreProvider();
   final _fireauthProvider = FireauthProvider();
 
-  Future<int> authenticateUser() =>
+  Future<String> authenticateUser() =>
       _fireauthProvider.authenticateUser();
 
   Future<void> registerUser(String email, String password) =>
@@ -17,11 +17,12 @@ class Repository {
   Future<void> uploadGoal(String email, String title, String goal) =>
       _firestoreProvider.uploadGoal(title, email, goal);
 
-  Stream<DocumentSnapshot> myGoalList(String email) =>
-      _firestoreProvider.myGoalList(email);
+  Stream<QuerySnapshot> chatList() =>
+      _firestoreProvider.chatList();
 
-  Stream<QuerySnapshot> othersGoalList() => _firestoreProvider.othersGoalList();
-
-  void removeGoal(String title, email) =>
-      _firestoreProvider.removeGoal(title, email);
+  Future<DocumentSnapshot> getUser(String userId) =>
+      _firestoreProvider.getUser(userId);
+//
+//  void removeGoal(String title, email) =>
+//      _firestoreProvider.removeGoal(title, email);
 }

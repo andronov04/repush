@@ -44,7 +44,7 @@ class LoginBloc {
         }
       });
 
-  Future<int> submit() {
+  Future<String> submit() {
     return _repository.authenticateUser();
   }
 

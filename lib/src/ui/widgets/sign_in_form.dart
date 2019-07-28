@@ -64,20 +64,24 @@ class SignInFormState extends State<SignInForm> {
   void authenticateUser() {
     _bloc.showProgressBar(true);
     _bloc.submit().then((value) {
-      if (value == 0) {
+      if (value != Null) {
         //New User
-        _bloc.registerUser().then((value) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ChatList(_bloc.emailAddress)));
-        });
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ChatList(value)));
+//        _bloc.registerUser().then((value) {
+//          Navigator.pushReplacement(
+//              context,
+//              MaterialPageRoute(
+//                  builder: (context) => ChatList(value)));
+//        });
       } else {
         //Already registered
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => ChatList(_bloc.emailAddress)));
+                builder: (context) => ChatList(value)));
       }
     });
   }

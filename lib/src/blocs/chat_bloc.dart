@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/chat.dart';
+import '../models/user.dart';
 import '../utils/strings.dart';
 
 import '../resources/repository.dart';
@@ -56,13 +57,35 @@ class ChatBloc {
 //    });
   }
 
-  Stream<DocumentSnapshot> myGoalsList(String email) {
-    return _repository.myGoalList(email);
+  Stream<QuerySnapshot> chatList() {
+    return _repository.chatList().asyncMap((snap) async  {
+      // Mapping to and from
+      int index = 0;
+
+      await Future.wait(snap.documents.map((doc) async {
+        DocumentSnapshot fr = await getUser(doc['from'].documentID);
+        doc.data['from'] = fr.data;
+
+        DocumentSnapshot to = await getUser(doc['to'].documentID);
+
+        doc.data['to'] = to.data;
+        snap.documents[index] = doc;
+        index++;
+        return doc;
+      }));
+
+      return snap;
+    });
   }
 
-  Stream<QuerySnapshot> othersGoalList() {
-    return _repository.othersGoalList();
+  Future<DocumentSnapshot> getUser(String userId) {
+    return _repository.getUser(userId);
   }
+
+
+//  Stream<QuerySnapshot> othersGoalList() {
+//    return _repository.othersGoalList();
+//  }
 
   //dispose all open sink
   void dispose() async {
@@ -75,40 +98,28 @@ class ChatBloc {
   }
 
   //Convert map to goal list
-  List mapToList({DocumentSnapshot doc, List<DocumentSnapshot> docList}) {
-    if (docList != null) {
-//      List<OtherGoal> goalList = [];
-//      docList.forEach((document) {
-//        String email = document.data[StringConstant.emailField];
-//        Map<String, String> goals =
-//        document.data[StringConstant.goalField] != null
-//            ? document.data[StringConstant.goalField].cast<String, String>()
-//            : null;
-//        if (goals != null) {
-////          goals.forEach((title, message) {
-////            OtherGoal otherGoal = OtherGoal(email, title, message);
-////            goalList.add(otherGoal);
-////          });
-//        }
-//      });
-//      return goalList;
-    } else {
-      Map<String, String> goals = doc.data[StringConstant.goalField] != null
-          ? doc.data[StringConstant.goalField].cast<String, String>()
-          : null;
-      List<Chat> goalList = [];
-      if (goals != null) {
-        goals.forEach((title, message) {
-          Chat goal = Chat(title, message);
-          goalList.add(goal);
-        });
-      }
-      return goalList;
-    }
+  List mapToList({QuerySnapshot docs, List<DocumentSnapshot> docList}) {
+    List<Chat> chatList = [];
+
+    docs.documents.forEach((DocumentSnapshot doc) async {
+      User from = User(doc['from']['uid'],
+          doc['from']['nickUid'], doc['from']['displayName']);
+      User to = User(doc['to']['uid'],
+          doc['to']['nickUid'], doc['to']['displayName']);
+
+      Chat chat = Chat(doc.documentID, doc['isPending'], doc['isBlock'],
+          doc['helloText'], from, to);
+
+      chatList.add(chat);
+    });
+
+    print('EndList');
+
+    return chatList;
   }
 
-  //Remove item from the goal list
-  void removeGoal(String title, String email) {
-    return _repository.removeGoal(title, email);
-  }
+//  //Remove item from the goal list
+//  void removeGoal(String title, String email) {
+//    return _repository.removeGoal(title, email);
+//  }
 }

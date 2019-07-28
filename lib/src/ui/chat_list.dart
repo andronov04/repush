@@ -1,13 +1,13 @@
 import '../utils/strings.dart';
 import 'package:flutter/material.dart';
-//import 'widgets/my_goals_list.dart';
+import 'widgets/chat_list.dart';
 //import 'widgets/people_goals_list.dart';
 //import 'add_goal.dart';
 
 class ChatList extends StatefulWidget {
-  final String _emailAddress;
+  final String _currentUserUid;
 
-  ChatList(this._emailAddress);
+  ChatList(this._currentUserUid);
 
   @override
   ChatListState createState() {
@@ -57,7 +57,7 @@ class ChatListState extends State<ChatList>
 //          ],
 //        ),
 //      ),
-      body: Text('test'),
+      body: ChatListScreen(widget._currentUserUid),
     );
   }
 

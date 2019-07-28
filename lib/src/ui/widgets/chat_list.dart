@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import '../../blocs/chat_bloc_provider.dart';
 import '../../models/chat.dart';
 
-class MyGoalsListScreen extends StatefulWidget {
-  final String _emailAddress;
+class ChatListScreen extends StatefulWidget {
+  final String _currentUserUid;
 
-  MyGoalsListScreen(this._emailAddress);
+  ChatListScreen(this._currentUserUid);
 
   @override
-  _MyGoalsListState createState() {
-    return _MyGoalsListState();
+  _ChatListState createState() {
+    return _ChatListState();
   }
 }
 
-class _MyGoalsListState extends State<MyGoalsListScreen> {
+class _ChatListState extends State<ChatListScreen> {
   ChatBloc _bloc;
 
   @override
@@ -31,48 +31,120 @@ class _MyGoalsListState extends State<MyGoalsListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget._currentUserUid);
     return Container(
       alignment: Alignment(0.0, 0.0),
-      child: StreamBuilder(
-          stream: _bloc.myGoalsList(widget._emailAddress),
+      child:
+      StreamBuilder(
+          stream: _bloc.chatList(),
           builder:
-              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasData) {
-              DocumentSnapshot doc = snapshot.data;
-              List<Chat> goalsList = _bloc.mapToList(doc: doc);
-              if (goalsList.isNotEmpty) {
-                return buildList(goalsList);
-              } else {
-                return Text("No Goals");
-              }
+              QuerySnapshot docs = snapshot.data;
+              List<Chat> chatList = _bloc.mapToList(docs: docs);
+
+              return buildList(chatList);
             } else {
-              return Text("No Goals");
+              return Text("No chats");
             }
           }),
     );
   }
 
-  ListView buildList(List<Chat> goalsList) {
+  ListView buildList(List<Chat> chatList) {
+    bool isFocus = false;
+
     return ListView.separated(
         separatorBuilder: (BuildContext context, int index) => Divider(),
-        itemCount: goalsList.length,
+        itemCount: chatList.length,
         itemBuilder: (context, index) {
-          final item = goalsList[index];
-          return Dismissible(
-              key: Key(item.id.toString()),
-              onDismissed: (direction) {
-                _bloc.removeGoal(item.title, widget._emailAddress);
-              },
-              background: Container(color: Colors.red),
-              child: ListTile(
-                title: Text(
-                  goalsList[index].title,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+          final item = chatList[index];
+          return new Container(
+            margin: EdgeInsets.only(
+                left: 20.0,
+                right: 20.0,
+                top: 20.0
+            ),
+            child: new Container(
+              width: MediaQuery.of(context).size.width,
+              height: 40.0,
+//        height: MediaQuery.of(context).size.height,
+
+              child: new Material(
+//          borderRadius: BorderRadius.circular(100.0),
+                child: new Container(
+                    decoration: BoxDecoration(
+                      color: isFocus ? Colors.blueAccent.withOpacity(0.25) : null,
+                      border: Border.all(
+                          width: 2.0,
+                          color: Colors.blueAccent.withOpacity(isFocus ? 0.0 : 0.35)
+                      ),
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(150.0) //         <--- border radius here
+                      ),
+                    ),
+                    child: new Container(
+                      padding: EdgeInsets.all(2.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          new Container(
+                            width: 200.0,
+                            child: TextField(
+                              onTap: (){
+//                        setState(() {
+//                          isFocus = !isFocus;
+//                        });
+                              },
+                              decoration: new InputDecoration(
+                                contentPadding: EdgeInsets.only(left: 10.0),
+                                hintText: "Type a message",
+                                border: InputBorder.none,
+                              ),
+                              onSubmitted: (String str) {
+                                print(str);
+//                                text += str;
+                              },
+//                              controller: controller,
+                            ),
+                          ),
+                          FlatButton(
+                            child: Text(
+                              'PUSH',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontFamily: 'Arial',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            textColor: Colors.white,
+                            color: Colors.blueAccent,
+                            shape:
+                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+                            onPressed: () {
+//                              print(text);
+//                      this.createMessage();
+//                controller.text = '';
+                            },
+                          ),
+                        ],
+                      ),
+                    )
                 ),
-                subtitle: Text(goalsList[index].message),
-              ));
+              ),
+            ),
+          );
+//          return Dismissible(
+//              key: Key(item.id.toString()),
+//              onDismissed: (direction) {
+////                _bloc.removeGoal(item.title, widget._emailAddress);
+//              },
+//              background: Container(color: Colors.red),
+//              child: ListTile(
+//                leading: Text(chatList[index].to.nickUid.toString()),
+//                title: Text(chatList[index].userNameChat(widget._currentUserUid)),
+//                subtitle: Text(chatList[index].from.nickUid.toString()),
+//              ));
         });
   }
 }

@@ -42,8 +42,12 @@ class FirestoreProvider {
         .setData({'goals': goals, 'goalAdded': true}, merge: true);
   }
 
-  Stream<DocumentSnapshot> myGoalList(String documentId) {
-    return _firestore.collection("users").document(documentId).snapshots();
+  Stream<QuerySnapshot> chatList() {
+    return _firestore.collection("chats").snapshots();
+  }
+
+  Future<DocumentSnapshot> getUser(String userId) {
+    return _firestore.collection("users").document(userId).get();
   }
 
   Stream<QuerySnapshot> othersGoalList() {
