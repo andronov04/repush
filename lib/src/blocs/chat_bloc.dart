@@ -103,9 +103,11 @@ class ChatBloc {
 
     docs.documents.forEach((DocumentSnapshot doc) async {
       User from = User(doc['from']['uid'],
-          doc['from']['nickUid'], doc['from']['displayName']);
+          doc['from']['nickUid'], doc['from']['displayName'],
+          doc['from']['color']);
       User to = User(doc['to']['uid'],
-          doc['to']['nickUid'], doc['to']['displayName']);
+          doc['to']['nickUid'], doc['to']['displayName'],
+          doc['to']['color']);
 
       Chat chat = Chat(doc.documentID, doc['isPending'], doc['isBlock'],
           doc['helloText'], from, to);

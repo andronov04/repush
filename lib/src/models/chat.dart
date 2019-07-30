@@ -25,4 +25,11 @@ class Chat {
     }
     return this.to.nickUid.toString();
   }
+
+  String useColorChat(String currentUserUid) {
+    if(currentUserUid == this.to.id){
+      return this.from.color;
+    }
+    return this.to.color;
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../../utils.dart';
 import '../../blocs/chat_bloc_provider.dart';
 import '../../models/chat.dart';
 
@@ -16,6 +17,9 @@ class ChatListScreen extends StatefulWidget {
 
 class _ChatListState extends State<ChatListScreen> {
   ChatBloc _bloc;
+  int chatActiveIndex = -1;
+
+  final TextEditingController controller = new TextEditingController();
 
   @override
   void didChangeDependencies() {
@@ -74,10 +78,12 @@ class _ChatListState extends State<ChatListScreen> {
 //          borderRadius: BorderRadius.circular(100.0),
                 child: new Container(
                     decoration: BoxDecoration(
-                      color: isFocus ? Colors.blueAccent.withOpacity(0.25) : null,
+                      color: chatActiveIndex == index ?
+                          HexColor(item.useColorChat(widget._currentUserUid)).withOpacity(0.25)
+                          : null,
                       border: Border.all(
                           width: 2.0,
-                          color: Colors.blueAccent.withOpacity(isFocus ? 0.0 : 0.35)
+                          color: HexColor(item.useColorChat(widget._currentUserUid)).withOpacity(chatActiveIndex == index ? 0.0 : 0.35)
                       ),
                       borderRadius: BorderRadius.all(
                           Radius.circular(150.0) //         <--- border radius here
@@ -92,9 +98,9 @@ class _ChatListState extends State<ChatListScreen> {
                             width: 200.0,
                             child: TextField(
                               onTap: (){
-//                        setState(() {
-//                          isFocus = !isFocus;
-//                        });
+                                setState(() {
+                                  chatActiveIndex = index;
+                                });
                               },
                               decoration: new InputDecoration(
                                 contentPadding: EdgeInsets.only(left: 10.0),
@@ -105,9 +111,10 @@ class _ChatListState extends State<ChatListScreen> {
                                 print(str);
 //                                text += str;
                               },
-//                              controller: controller,
+                              controller: controller,
                             ),
                           ),
+                          Text(item.userNameChat(widget._currentUserUid)),
                           FlatButton(
                             child: Text(
                               'PUSH',
@@ -118,11 +125,11 @@ class _ChatListState extends State<ChatListScreen> {
                               ),
                             ),
                             textColor: Colors.white,
-                            color: Colors.blueAccent,
+                            color: HexColor(item.useColorChat(widget._currentUserUid)),
                             shape:
                             RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                             onPressed: () {
-//                              print(text);
+                              print(controller.text);
 //                      this.createMessage();
 //                controller.text = '';
                             },
@@ -134,17 +141,6 @@ class _ChatListState extends State<ChatListScreen> {
               ),
             ),
           );
-//          return Dismissible(
-//              key: Key(item.id.toString()),
-//              onDismissed: (direction) {
-////                _bloc.removeGoal(item.title, widget._emailAddress);
-//              },
-//              background: Container(color: Colors.red),
-//              child: ListTile(
-//                leading: Text(chatList[index].to.nickUid.toString()),
-//                title: Text(chatList[index].userNameChat(widget._currentUserUid)),
-//                subtitle: Text(chatList[index].from.nickUid.toString()),
-//              ));
         });
   }
 }
