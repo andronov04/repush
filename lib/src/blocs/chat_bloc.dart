@@ -56,8 +56,8 @@ class ChatBloc {
 //    });
   }
 
-  Stream<QuerySnapshot> chatList() {
-    return _repository.chatList().asyncMap((snap) async  {
+  Stream<QuerySnapshot> chatList(String currentUserId) {
+    return _repository.chatList(currentUserId).asyncMap((snap) async  {
       // Mapping to and from
       int index = 0;
 

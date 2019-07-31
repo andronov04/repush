@@ -40,6 +40,86 @@ class _ChatItemState extends State<ChatItemScreen> {
     var chatActiveIndex = -1;
     var item = widget.chat;
 
+    if(item.isPending){
+      print(item.to.id);
+      print(widget._currentUserUid);
+
+      // check if i requested to another user
+      bool to = item.to.id == widget._currentUserUid;
+      print(to);
+
+      return new Container(
+        margin: EdgeInsets.only(
+            left: 20.0,
+            right: 20.0,
+            top: 20.0
+        ),
+        child: new Container(
+          width: MediaQuery.of(context).size.width,
+          height: 40.0,
+//        height: MediaQuery.of(context).size.height,
+
+          child: new Material(
+//          borderRadius: BorderRadius.circular(100.0),
+            child: new Container(
+                child: new Container(
+                  padding: EdgeInsets.only(
+                    left: 12.0,
+                    right: 4.0,
+                    top: 4.0,
+                    bottom: 4.0
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          new Text(to ? 'REQUESTED' : 'REQUEST',
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 10.0
+                              )
+                          ),
+                          Text(item.userNameChat(widget._currentUserUid),
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 16.0,
+                                fontWeight: FontWeight.bold
+                              )
+                          )
+                        ],
+                      ),
+                      FlatButton(
+                        child: Text(
+                          to ? 'CANCEL' : 'CONFIRM',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontFamily: 'Arial',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        textColor: Colors.white,
+                        color: Colors.black54,
+                        shape:
+                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+                        onPressed: () {
+                          print(controller.text);
+                          _bloc.createMsg(widget._currentUserUid, item.id, controller.text);
+//                      this.createMessage();
+                          controller.text = '';
+                        },
+                      ),
+                    ],
+                  ),
+                )
+            ),
+          ),
+        ),
+      );
+    }
+
     return new Container(
       margin: EdgeInsets.only(
           left: 20.0,

@@ -17,8 +17,8 @@ class Repository {
   Future<void> createMsg(String currentUserId, String chatId, String text) =>
       _firestoreProvider.createMsg(currentUserId, chatId, text);
 
-  Stream<QuerySnapshot> chatList() =>
-      _firestoreProvider.chatList();
+  Stream<QuerySnapshot> chatList(String currentUserId) =>
+      _firestoreProvider.chatList(currentUserId);
 
   Future<DocumentSnapshot> getUser(String userId) =>
       _firestoreProvider.getUser(userId);

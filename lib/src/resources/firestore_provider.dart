@@ -46,8 +46,8 @@ class FirestoreProvider {
         });
   }
 
-  Stream<QuerySnapshot> chatList() {
-    return _firestore.collection("chats").snapshots();
+  Stream<QuerySnapshot> chatList(String currentUserId) {
+    return _firestore.collection("chats").where('users', arrayContains: currentUserId).snapshots();
   }
 
   Future<DocumentSnapshot> getUser(String userId) {

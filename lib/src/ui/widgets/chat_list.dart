@@ -38,7 +38,7 @@ class _ChatListState extends State<ChatListScreen> {
       alignment: Alignment(0.0, 0.0),
       child:
       StreamBuilder(
-          stream: _bloc.chatList(),
+          stream: _bloc.chatList(widget._currentUserUid),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasData) {
