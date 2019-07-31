@@ -10,8 +10,8 @@ class Repository {
   Future<String> authenticateUser() =>
       _fireauthProvider.authenticateUser();
 
-  Future<void> registerUser(String email, String password) =>
-      _firestoreProvider.registerUser(email, password);
+//  Future<void> registerUser(String currentUserId) =>
+//      _firestoreProvider.registerUser(currentUserId;
 
 
   Future<void> createMsg(String currentUserId, String chatId, String text) =>
@@ -22,6 +22,10 @@ class Repository {
 
   Future<DocumentSnapshot> getUser(String userId) =>
       _firestoreProvider.getUser(userId);
+
+  Future<void> setTokenToUser(String currentUserId, String token) =>
+      _firestoreProvider.setTokenToUser(currentUserId, token);
+
 //
 //  void removeGoal(String title, email) =>
 //      _firestoreProvider.removeGoal(title, email);

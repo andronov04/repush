@@ -1,10 +1,8 @@
+import 'package:repush/src/ui/widgets/add_user_header.dart';
 import 'package:repush/src/ui/widgets/user_header.dart';
 
-import '../utils/strings.dart';
 import 'package:flutter/material.dart';
 import 'widgets/chat_list.dart';
-//import 'widgets/people_goals_list.dart';
-//import 'add_goal.dart';
 
 class ChatList extends StatefulWidget {
   final String _currentUserUid;
@@ -57,7 +55,7 @@ class ChatListState extends State<ChatList>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               UserHeaderScreen(widget._currentUserUid),
-              Text('add user')
+              AddUserHeaderScreen(widget._currentUserUid)
             ],
           ),
         ),

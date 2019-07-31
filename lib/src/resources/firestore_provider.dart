@@ -17,22 +17,33 @@ class FirestoreProvider {
 //    }
   }
 
-  Future<void> registerUser(String email, String password) async {
-    return _firestore
-        .collection("users")
-        .document(email)
-        .setData({'email': email, 'password': password, 'goalAdded': false});
-  }
+//  Future<void> registerUser(String currentUserId) async {
+//    return _firestore
+//        .collection("users")
+//        .document(email)
+//        .setData({'email': email, 'password': password, 'goalAdded': false});
+//  }
 
   Future<void> createMsg(String currentUserId, String chatId, String text) async {
     print('createMsg $currentUserId to $chatId with $text');
     return _firestore.collection('messages').document().setData({
       'text': text,
-      'chatRef': '/chats/$chatId',
+      'chatID': chatId,
       'creatorID': currentUserId,
       'created_at': FieldValue.serverTimestamp(),
     });
 
+  }
+
+  Future<void> setTokenToUser(String currentUserId, String token) async {
+    print('Set token for $currentUserId');
+    return _firestore
+            .collection('tokens')
+            .document(currentUserId)
+            .setData({
+          'token': token,
+          'createdAt': FieldValue.serverTimestamp(), // optional
+        });
   }
 
   Stream<QuerySnapshot> chatList() {

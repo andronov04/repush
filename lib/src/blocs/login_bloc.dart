@@ -48,8 +48,8 @@ class LoginBloc {
     return _repository.authenticateUser();
   }
 
-  Future<void> registerUser() {
-    return _repository.registerUser(_email.value, _password.value);
+  Future<void> setTokenToUser(String currentUserId, String token) {
+    return _repository.setTokenToUser(currentUserId, token);
   }
 
   void dispose() async {
