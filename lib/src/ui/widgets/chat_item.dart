@@ -71,6 +71,7 @@ class _ChatItemState extends State<ChatItemScreen> {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -91,26 +92,46 @@ class _ChatItemState extends State<ChatItemScreen> {
                           )
                         ],
                       ),
-                      FlatButton(
-                        child: Text(
-                          to ? 'CANCEL' : 'CONFIRM',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontFamily: 'Arial',
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        textColor: Colors.white,
-                        color: Colors.black54,
-                        shape:
-                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-                        onPressed: () {
-                          print(controller.text);
-                          _bloc.createMsg(widget._currentUserUid, item.id, controller.text);
+                      new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          !to ? IconButton(
+                            icon: Icon(Icons.clear, color: Colors.black54, size: 16.0),
+                            padding: EdgeInsets.all(0.0),
+                            focusColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            iconSize: 2.0,
+                            tooltip: 'Increase volume by 10',
+                            onPressed: () {
+                              setState(() {
+                              });
+                            },
+                          ) : Text(''),
+                          FlatButton(
+                            child: Text(
+                              to ? 'CANCEL' : 'CONFIRM',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontFamily: 'Arial',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            textColor: Colors.white,
+                            color: Colors.black54,
+                            shape:
+                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+                            onPressed: () {
+                              print(controller.text);
+                              _bloc.createMsg(widget._currentUserUid, item.id, controller.text);
 //                      this.createMessage();
-                          controller.text = '';
-                        },
-                      ),
+                              controller.text = '';
+                            },
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 )
@@ -187,8 +208,9 @@ class _ChatItemState extends State<ChatItemScreen> {
                       RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                       onPressed: () {
                         print(controller.text);
-                        _bloc.createMsg(widget._currentUserUid, item.id, controller.text);
-//                      this.createMessage();
+                        if(controller.text != ''){
+                          _bloc.createMsg(widget._currentUserUid, item.id, controller.text);
+                        }
                         controller.text = '';
                       },
                     ),

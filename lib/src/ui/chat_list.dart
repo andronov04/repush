@@ -41,15 +41,20 @@ class ChatListState extends State<ChatList>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size(null, 35),
+        preferredSize: Size(null, 50),
         child: new Container(
           width: MediaQuery.of(context).size.width,
-          height: 35,
-          margin: EdgeInsets.only(
-            left: 20.0,
-            right: 20.0,
-            top: 20.0
+          padding: EdgeInsets.only(
+              left: 30.0,
+              right: 25.0,
+              top: 30.0,
+              bottom: 8.0
           ),
+//          margin: EdgeInsets.only(
+//            left: 30.0,
+//            right: 25.0,
+//            top: 24.0
+//          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
