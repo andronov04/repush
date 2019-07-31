@@ -1,3 +1,5 @@
+import 'package:repush/src/ui/widgets/user_header.dart';
+
 import '../utils/strings.dart';
 import 'package:flutter/material.dart';
 import 'widgets/chat_list.dart';
@@ -40,39 +42,27 @@ class ChatListState extends State<ChatList>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-//      appBar: AppBar(
-//        title: Text(
-//          StringConstant.goalListTitle,
-//          style: TextStyle(
-//            color: Colors.black,
-//          ),
-//        ),
-//        backgroundColor: Colors.amber,
-//        elevation: 0.0,
-//        bottom: TabBar(
-//          controller: _tabController,
-//          tabs: <Tab>[
-//            Tab(text: StringConstant.worldTab),
-//            Tab(text: StringConstant.myTab),
-//          ],
-//        ),
-//      ),
+      appBar: PreferredSize(
+        preferredSize: Size(null, 35),
+        child: new Container(
+          width: MediaQuery.of(context).size.width,
+          height: 35,
+          margin: EdgeInsets.only(
+            left: 20.0,
+            right: 20.0,
+            top: 20.0
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              UserHeaderScreen(widget._currentUserUid),
+              Text('add user')
+            ],
+          ),
+        ),
+      ),
       body: ChatListScreen(widget._currentUserUid),
     );
   }
-
-//  Widget _bottomButtons() {
-//    if (_tabController.index == 1) {
-////      return FloatingActionButton(
-////          child: Icon(Icons.add),
-////          onPressed: () {
-////            Navigator.push(
-////                context,
-////                MaterialPageRoute(
-////                    builder: (context) => AddGoalScreen(widget._emailAddress)));
-////          });
-//    } else {
-//      return null;
-//    }
-//  }
 }

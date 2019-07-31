@@ -24,22 +24,15 @@ class FirestoreProvider {
         .setData({'email': email, 'password': password, 'goalAdded': false});
   }
 
-  Future<void> uploadGoal(String title, String documentId, String goal) async {
-    DocumentSnapshot doc =
-    await _firestore.collection("users").document(documentId).get();
-    Map<String, String> goals = doc.data["goals"] != null
-        ? doc.data["goals"].cast<String, String>()
-        : null;
-    if (goals != null) {
-      goals[title] = goal;
-    } else {
-      goals = Map();
-      goals[title] = goal;
-    }
-    return _firestore
-        .collection("users")
-        .document(documentId)
-        .setData({'goals': goals, 'goalAdded': true}, merge: true);
+  Future<void> createMsg(String currentUserId, String chatId, String text) async {
+    print('createMsg $currentUserId to $chatId with $text');
+    return _firestore.collection('messages').document().setData({
+      'text': text,
+      'chatRef': '/chats/$chatId',
+      'creatorID': currentUserId,
+      'created_at': FieldValue.serverTimestamp(),
+    });
+
   }
 
   Stream<QuerySnapshot> chatList() {

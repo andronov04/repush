@@ -14,8 +14,8 @@ class Repository {
       _firestoreProvider.registerUser(email, password);
 
 
-  Future<void> uploadGoal(String email, String title, String goal) =>
-      _firestoreProvider.uploadGoal(title, email, goal);
+  Future<void> createMsg(String currentUserId, String chatId, String text) =>
+      _firestoreProvider.createMsg(currentUserId, chatId, text);
 
   Stream<QuerySnapshot> chatList() =>
       _firestoreProvider.chatList();

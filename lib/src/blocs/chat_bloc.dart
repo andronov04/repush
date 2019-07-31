@@ -43,12 +43,11 @@ class ChatBloc {
       });
 
   void submit(String email) {
-    _showProgress.sink.add(true);
-    _repository
-        .uploadGoal(email, _title.value, _goalMessage.value)
-        .then((value) {
-      _showProgress.sink.add(false);
-    });
+
+  }
+
+  Future<void> createMsg(String currentUserId, String chatId, String text) {
+    return _repository.createMsg(currentUserId, chatId, text);
   }
 
   void extractText(var image) {

@@ -10,7 +10,7 @@ class StringConstant{
   static const String emailHint = "Enter Email ID";
   static const String submit = "Submit";
   static const String errorMessage = "Please fix all the errors";
-  static const String goalListTitle = "Goals List";
+  static const String appTitle = "Repush";
   static const String worldTab = "World";
   static const String myTab = "Me";
 
