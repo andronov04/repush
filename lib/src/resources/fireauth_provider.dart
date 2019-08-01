@@ -9,6 +9,10 @@ class FireauthProvider {
     return user.uid;
   }
 
+  Future<FirebaseUser> currentAuthUser() async {
+    return firebaseAuth.currentUser();
+  }
+
   Future<int> authenticateUserOld(String email, String password) async {
 
 //    final QuerySnapshot result = await _firestore

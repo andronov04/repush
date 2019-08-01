@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../../utils/strings.dart';
 import 'package:flutter/material.dart';
 import '../../blocs/login_bloc_provider.dart';
@@ -18,6 +20,8 @@ class SignInFormState extends State<SignInForm> {
   String _homeScreenText = "Waiting for token...";
   String _token = '';
 
+
+
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
@@ -36,7 +40,7 @@ class SignInFormState extends State<SignInForm> {
   void initState() {
     super.initState();
 
-//    createUserIfNotExists();
+    currentAuthUser();
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
@@ -73,26 +77,34 @@ class SignInFormState extends State<SignInForm> {
       });
       print(_homeScreenText);
     });
+  }
 
-//    currentUser = firestore.collection('users').document(user.uid).snapshots();
-
-
-
+  void currentAuthUser() {
+    _bloc.currentAuthUser().then((FirebaseUser user) {
+      // ignore: unrelated_type_equality_checks
+      if (user != Null) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ChatList(user.uid)));
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(margin: EdgeInsets.only(top: 5.0, bottom: 5.0)),
-        submitButton()
+        loginButton()
       ],
     );
   }
 
 
-  Widget submitButton() {
+  Widget loginButton() {
     return StreamBuilder(
         stream: _bloc.signInStatus,
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -148,12 +160,5 @@ class SignInFormState extends State<SignInForm> {
                 builder: (context) => ChatList(value)));
       }
     });
-  }
-
-  void showErrorMessage() {
-    final snackbar = SnackBar(
-        content: Text(StringConstant.errorMessage),
-        duration: new Duration(seconds: 2));
-    Scaffold.of(context).showSnackBar(snackbar);
   }
 }

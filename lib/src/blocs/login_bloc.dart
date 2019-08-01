@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../utils/strings.dart';
 
 import '../resources/repository.dart';
@@ -51,6 +53,11 @@ class LoginBloc {
   Future<void> setTokenToUser(String currentUserId, String token) {
     return _repository.setTokenToUser(currentUserId, token);
   }
+
+  Future<FirebaseUser> currentAuthUser() {
+    return _repository.currentAuthUser();
+  }
+
 
   void dispose() async {
     await _email.drain();

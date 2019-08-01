@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'firestore_provider.dart';
 import 'fireauth_provider.dart';
@@ -9,6 +10,9 @@ class Repository {
 
   Future<String> authenticateUser() =>
       _fireauthProvider.authenticateUser();
+
+  Future<FirebaseUser> currentAuthUser() =>
+      _fireauthProvider.currentAuthUser();
 
 //  Future<void> registerUser(String currentUserId) =>
 //      _firestoreProvider.registerUser(currentUserId;
