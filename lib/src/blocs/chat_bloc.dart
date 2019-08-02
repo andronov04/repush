@@ -85,6 +85,10 @@ class ChatBloc {
     return _repository.confirmChat(chatId, status);
   }
 
+  Future<void> createChat(String currentUserId, String toUser) {
+    return _repository.createChat(currentUserId, toUser);
+  }
+
 //  Stream<QuerySnapshot> othersGoalList() {
 //    return _repository.othersGoalList();
 //  }

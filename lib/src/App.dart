@@ -11,15 +11,15 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           theme: ThemeData(
             accentColor: Colors.black,
-            primaryColor: Colors.amber,
+            primaryColor: Colors.lightBlueAccent,
           ),
           home: Scaffold(
             appBar: AppBar(
               title: Text(
-                "Goals",
-                style: TextStyle(color: Colors.black),
+                "Repush",
+                style: TextStyle(color: Colors.white),
               ),
-              backgroundColor: Colors.amber,
+              backgroundColor: Colors.lightBlueAccent,
               elevation: 0.0,
             ),
             body: LoginScreen(),

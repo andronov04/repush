@@ -36,11 +36,22 @@ class SignInFormState extends State<SignInForm> {
     super.dispose();
   }
 
+  void currentAuthUser() async {
+    print('currentUser');
+    _bloc.currentAuthUser().then((FirebaseUser user) {
+      // ignore: unrelated_type_equality_checks
+      if (user != Null) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ChatList(user.uid)));
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-
-    currentAuthUser();
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
@@ -79,20 +90,9 @@ class SignInFormState extends State<SignInForm> {
     });
   }
 
-  void currentAuthUser() {
-    _bloc.currentAuthUser().then((FirebaseUser user) {
-      // ignore: unrelated_type_equality_checks
-      if (user != Null) {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ChatList(user.uid)));
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    currentAuthUser();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

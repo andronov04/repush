@@ -17,12 +17,54 @@ class FirestoreProvider {
 //    }
   }
 
-//  Future<void> registerUser(String currentUserId) async {
+  Future<void> createChat(String currentUserId, String toUser) async {
+    print('Create chat $currentUserId - $toUser');
+
+    QuerySnapshot doc = await _firestore.collection('users').where('nickUid', isEqualTo: int.parse(toUser)).getDocuments();
+
+    if(doc.documents != null){
+      DocumentSnapshot toUserDoc = doc.documents.first;
+      DocumentReference fromUserDoc = _firestore.collection('users').document(currentUserId);
+
+      //TODO ugly hack
+      QuerySnapshot chat1 = await _firestore.collection('chats')
+          .where('from', isEqualTo: toUserDoc.reference)
+          .where('to', isEqualTo: fromUserDoc)
+          .getDocuments();
+
+      QuerySnapshot chat2 = await _firestore.collection('chats')
+          .where('from', isEqualTo: fromUserDoc)
+          .where('to', isEqualTo: toUserDoc.reference)
+          .getDocuments();
+
+      print(chat1.documents);
+      print(chat2.documents);
+
+      // ignore: unrelated_type_equality_checks
+      if(chat1.documents.isEmpty && chat2.documents.isEmpty){
+        return _firestore.collection('chats').document().setData({
+          'isPending': true,
+          'isBlock': false,
+          'helloText': '',
+          'to': toUserDoc.reference,
+          'from': fromUserDoc,
+          'users': [
+            toUserDoc.documentID,
+            currentUserId
+          ],
+          'created_at': FieldValue.serverTimestamp(),
+        });
+      }
+      else{
+        return throw('User don\'t exists');
+      }
+    }
+    else {
+      return throw('User don\'t exists');
+    }
 //    return _firestore
-//        .collection("users")
-//        .document(email)
-//        .setData({'email': email, 'password': password, 'goalAdded': false});
-//  }
+//        .collection("users");
+  }
 
   Future<void> confirmChat(String chatId, bool status) async {
     print('Confirm chat $chatId - $status');

@@ -45,7 +45,7 @@ class _ChatItemState extends State<ChatItemScreen> {
       print(widget._currentUserUid);
 
       // check if i requested to another user
-      bool to = item.to.id == widget._currentUserUid;
+      bool to = item.to.id != widget._currentUserUid;
       print(to);
 
       return new Container(
@@ -178,7 +178,7 @@ class _ChatItemState extends State<ChatItemScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     new Container(
-                      width: 200.0,
+                      width: 190.0,
                       child: TextField(
                         onTap: (){
                           setState(() {
@@ -197,7 +197,17 @@ class _ChatItemState extends State<ChatItemScreen> {
                         controller: controller,
                       ),
                     ),
-                    Text(item.userNameChat(widget._currentUserUid)),
+                    new Container(
+                      padding: EdgeInsets.only(
+                        right: 10.0
+                      ),
+                      child: Text(
+                        item.userNameChat(widget._currentUserUid),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ),
                     FlatButton(
                       child: Text(
                         'PUSH',

@@ -24,6 +24,9 @@ class Repository {
   Future<void> confirmChat(String chatId, bool status) =>
       _firestoreProvider.confirmChat(chatId, status);
 
+  Future<void> createChat(String currentUserId, String toUser) =>
+      _firestoreProvider.createChat(currentUserId, toUser);
+
   Stream<QuerySnapshot> chatList(String currentUserId) =>
       _firestoreProvider.chatList(currentUserId);
 

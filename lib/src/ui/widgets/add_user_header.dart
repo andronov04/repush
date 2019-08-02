@@ -94,6 +94,9 @@ class AddUserHeaderState extends State<AddUserHeaderScreen> {
                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
                     onPressed: () {
                       print(controller.text);
+                      if(controller.text != ''){
+                        _bloc.createChat(widget._currentUserUid, controller.text);
+                      }
                       controller.text = '';
                     },
                   ),
