@@ -24,6 +24,24 @@ class FirestoreProvider {
 //        .setData({'email': email, 'password': password, 'goalAdded': false});
 //  }
 
+  Future<void> confirmChat(String chatId, bool status) async {
+    print('Confirm chat $chatId - $status');
+    if(status) {
+      return _firestore
+          .collection("chats")
+          .document(chatId)
+          .delete();
+//          .document(chatId)
+//          .updateData({"isBlock": true});
+    }
+    else {
+      return _firestore
+          .collection("chats")
+          .document(chatId)
+          .updateData({"isPending": status});
+    }
+  }
+
   Future<void> createMsg(String currentUserId, String chatId, String text) async {
     print('createMsg $currentUserId to $chatId with $text');
     return _firestore.collection('messages').document().setData({

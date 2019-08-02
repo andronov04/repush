@@ -106,8 +106,9 @@ class _ChatItemState extends State<ChatItemScreen> {
                             iconSize: 2.0,
                             tooltip: 'Increase volume by 10',
                             onPressed: () {
-                              setState(() {
-                              });
+//                              setState(() {
+//                              });
+                              _bloc.confirmChat(item.id, true);
                             },
                           ) : Text(''),
                           FlatButton(
@@ -124,8 +125,12 @@ class _ChatItemState extends State<ChatItemScreen> {
                             shape:
                             RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
                             onPressed: () {
-                              print(controller.text);
-                              _bloc.createMsg(widget._currentUserUid, item.id, controller.text);
+                                if(to){
+                                  _bloc.confirmChat(item.id, true);
+                                }
+                                else{
+                                  _bloc.confirmChat(item.id, false);
+                                }
 //                      this.createMessage();
                               controller.text = '';
                             },

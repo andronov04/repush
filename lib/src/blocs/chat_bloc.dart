@@ -81,6 +81,9 @@ class ChatBloc {
     return _repository.getUser(userId);
   }
 
+  Future<void> confirmChat(String chatId, bool status) {
+    return _repository.confirmChat(chatId, status);
+  }
 
 //  Stream<QuerySnapshot> othersGoalList() {
 //    return _repository.othersGoalList();
