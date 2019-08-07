@@ -249,25 +249,30 @@ class _ChatItemState extends State<ChatItemScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      new Container(
-                        width: 190.0,
-                        child: TextField(
-                          onTap: (){
-                            setState(() {
-                              chatActiveIndex = index;
-                            });
-                          },
-                          decoration: new InputDecoration(
-                            contentPadding: EdgeInsets.only(left: 10.0),
-                            hintText: "Type a message",
-                            border: InputBorder.none,
-                          ),
-                          onSubmitted: (String str) {
-                            print(str);
-//                                text += str;
-                          },
-                          controller: controller,
-                        ),
+                      Expanded(
+                          flex: 6,
+                          child: new Container(
+                            padding: EdgeInsets.only(
+                                right: 10.0
+                            ),
+                            child: TextField(
+                              onTap: (){
+                                setState(() {
+                                  chatActiveIndex = index;
+                                });
+                              },
+                              decoration: new InputDecoration(
+                                contentPadding: EdgeInsets.only(left: 10.0),
+                                hintText: "Type a message",
+                                border: InputBorder.none,
+                              ),
+                              onSubmitted: (String str) {
+                                print(str);
+    //                                text += str;
+                              },
+                              controller: controller,
+                            ),
+                          )
                       ),
                       new Container(
                           padding: EdgeInsets.only(

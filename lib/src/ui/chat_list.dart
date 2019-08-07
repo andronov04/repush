@@ -45,8 +45,8 @@ class ChatListState extends State<ChatList>
         child: new Container(
           width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.only(
-              left: 30.0,
-              right: 25.0,
+              left: 20.0,
+              right: 20.0,
               top: 30.0,
               bottom: 8.0
           ),

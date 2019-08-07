@@ -57,6 +57,9 @@ class AddUserHeaderState extends State<AddUserHeaderScreen> {
               children: <Widget>[
                 new Container(
                   width: 100.0,
+                  padding: EdgeInsets.only(
+                      right: 10.0
+                  ),
                   child: TextField(
                     style: TextStyle(
                       fontSize: 12.0
@@ -78,13 +81,14 @@ class AddUserHeaderState extends State<AddUserHeaderScreen> {
                   ),
                 ),
                 Container(
-                  width: 27,
+                  width: 60,
                   child: FlatButton(
                     child: Text(
-                      '+',
+                      'ADD',
                       style: TextStyle(
                         fontSize: 10.0,
                         fontFamily: 'Arial',
+                        color: Colors.white,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
