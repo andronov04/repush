@@ -33,7 +33,8 @@ class UserHeaderState extends State<UserHeaderScreen> {
   Widget build(BuildContext context) {
     return new Container(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           new Text('YOUR ID',
               style: TextStyle(

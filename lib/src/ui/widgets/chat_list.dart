@@ -17,7 +17,6 @@ class ChatListScreen extends StatefulWidget {
 
 class _ChatListState extends State<ChatListScreen> {
   ChatBloc _bloc;
-  int chatActiveIndex = -1;
 
   @override
   void didChangeDependencies() {

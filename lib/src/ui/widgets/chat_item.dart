@@ -10,6 +10,8 @@ class ChatItemScreen extends StatefulWidget {
 
   final int indexChat;
 
+
+
   ChatItemScreen(this._currentUserUid, this.chat, this.indexChat);
 
   @override
@@ -204,6 +206,8 @@ class _ChatItemState extends State<ChatItemScreen> {
       );
     }
 
+    print(_bloc.activeIndex);
+
     return new Container(
       margin: EdgeInsets.only(
         right: 20.0,
@@ -233,7 +237,7 @@ class _ChatItemState extends State<ChatItemScreen> {
 //          borderRadius: BorderRadius.circular(100.0),
             child: new Container(
                 decoration: BoxDecoration(
-                  color: chatActiveIndex == index ?
+                  color: _bloc.activeIndex == index ?
                   HexColor(item.useColorChat(widget._currentUserUid)).withOpacity(0.25)
                       : null,
                   border: Border.all(
@@ -257,6 +261,7 @@ class _ChatItemState extends State<ChatItemScreen> {
                             ),
                             child: TextField(
                               onTap: (){
+                                _bloc.setActiveIndex(index);
                                 setState(() {
                                   chatActiveIndex = index;
                                 });

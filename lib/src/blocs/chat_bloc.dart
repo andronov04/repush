@@ -9,9 +9,14 @@ import 'package:rxdart/rxdart.dart';
 
 class ChatBloc {
   final _repository = Repository();
+  final _activeIndex = BehaviorSubject<int>.seeded(0);
+
   final _title = BehaviorSubject<String>();
   final _goalMessage = BehaviorSubject<String>();
   final _showProgress = BehaviorSubject<bool>();
+
+  Observable<int> get activeIndex => _activeIndex.stream;
+
 
   Observable<String> get name => _title.stream.transform(_validateName);
 
@@ -23,6 +28,12 @@ class ChatBloc {
   Function(String) get changeName => _title.sink.add;
 
   Function(String) get changeGoalMessage => _goalMessage.sink.add;
+
+  void setActiveIndex(int index) {
+    print('setactiveindex');
+    _activeIndex.add(index);
+  }
+
 
   final _validateMessage = StreamTransformer<String, String>.fromHandlers(
       handleData: (goalMessage, sink) {

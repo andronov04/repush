@@ -36,6 +36,7 @@ class AddUserHeaderState extends State<AddUserHeaderScreen> {
   @override
   Widget build(BuildContext context) {
     return new Container(
+      height: 35.0,
 
 
 //      width: 50.0,
@@ -54,6 +55,7 @@ class AddUserHeaderState extends State<AddUserHeaderScreen> {
             padding: EdgeInsets.all(2.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 new Container(
                   width: 100.0,

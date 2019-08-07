@@ -40,21 +40,23 @@ class ChatListState extends State<ChatList>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(null, 50),
-        child: new Container(
+      appBar: AppBar(
+//        preferredSize: Size(null, 30),
+      backgroundColor: Colors.white,
+        centerTitle: true,
+        flexibleSpace: new Container(
           width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.only(
-              left: 20.0,
-              right: 20.0,
-              top: 30.0,
-              bottom: 8.0
-          ),
-//          margin: EdgeInsets.only(
-//            left: 30.0,
-//            right: 25.0,
-//            top: 24.0
+//          padding: EdgeInsets.only(
+//              left: 20.0,
+//              right: 20.0,
+//              top: 40.0,
+//              bottom: 8.0
 //          ),
+          margin: EdgeInsets.only(
+            left: 30.0,
+            right: 25.0,
+            top: 24.0
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
