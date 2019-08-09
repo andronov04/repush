@@ -11,23 +11,8 @@ class ChatBloc {
   final _repository = Repository();
   final _activeIndex = BehaviorSubject<int>.seeded(0);
 
-  final _title = BehaviorSubject<String>();
-  final _goalMessage = BehaviorSubject<String>();
-  final _showProgress = BehaviorSubject<bool>();
-
   Observable<int> get activeIndex => _activeIndex.stream;
 
-
-  Observable<String> get name => _title.stream.transform(_validateName);
-
-  Observable<String> get goalMessage =>
-      _goalMessage.stream.transform(_validateMessage);
-
-  Observable<bool> get showProgress => _showProgress.stream;
-
-  Function(String) get changeName => _title.sink.add;
-
-  Function(String) get changeGoalMessage => _goalMessage.sink.add;
 
   void setActiveIndex(int index) {
     print('setactiveindex');
@@ -35,23 +20,6 @@ class ChatBloc {
   }
 
 
-  final _validateMessage = StreamTransformer<String, String>.fromHandlers(
-      handleData: (goalMessage, sink) {
-        if (goalMessage.length > 10) {
-          sink.add(goalMessage);
-        } else {
-          sink.addError(StringConstant.goalValidateMessage);
-        }
-      });
-
-  final _validateName = StreamTransformer<String, String>.fromHandlers(
-      handleData: (String name, sink) {
-        if (RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]').hasMatch(name)) {
-          sink.addError(StringConstant.nameValidateMessage);
-        } else {
-          sink.add(name);
-        }
-      });
 
   void submit(String email) {
 
@@ -71,6 +39,10 @@ class ChatBloc {
     return _repository.chatList(currentUserId).asyncMap((snap) async  {
       // Mapping to and from
       int index = 0;
+
+//      snap.documents.forEach((DocumentSnapshot doc){
+//        print(doc.documentID);
+//      });
 
       await Future.wait(snap.documents.map((doc) async {
         DocumentSnapshot fr = await getUser(doc['from'].documentID);
@@ -106,12 +78,8 @@ class ChatBloc {
 
   //dispose all open sink
   void dispose() async {
-    await _goalMessage.drain();
-    _goalMessage.close();
-    await _title.drain();
-    _title.close();
-    await _showProgress.drain();
-    _showProgress.close();
+    await _activeIndex.drain();
+    _activeIndex.close();
   }
 
   //Convert map to goal list
@@ -126,19 +94,25 @@ class ChatBloc {
           doc['to']['nickUid'], doc['to']['displayName'],
           doc['to']['color']);
 
+
+      DateTime dt = DateTime.now();
+
+      if(doc['lastActivityAt'] != null){
+        dt = doc['lastActivityAt'].toDate();
+      }
+
       Chat chat = Chat(doc.documentID, doc['isPending'], doc['isBlock'],
-          doc['helloText'], from, to);
+          doc['helloText'], from, to, dt);
 
       chatList.add(chat);
     });
 
     print('EndList');
 
+    chatList.sort((Chat a, Chat b){
+      return b.lastActivityAt.compareTo(a.lastActivityAt);
+    });
+
     return chatList;
   }
-
-//  //Remove item from the goal list
-//  void removeGoal(String title, String email) {
-//    return _repository.removeGoal(title, email);
-//  }
 }

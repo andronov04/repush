@@ -86,12 +86,22 @@ class FirestoreProvider {
 
   Future<void> createMsg(String currentUserId, String chatId, String text) async {
     print('createMsg $currentUserId to $chatId with $text');
-    return _firestore.collection('messages').document().setData({
+
+    _firestore.collection('messages').document().setData({
       'text': text,
       'chatID': chatId,
       'creatorID': currentUserId,
       'created_at': FieldValue.serverTimestamp(),
+    }).then((v){
     });
+
+    _firestore
+        .collection('chats')
+        .document(chatId).updateData({
+      'lastActivityAt': FieldValue.serverTimestamp()
+    });
+
+
 
   }
 
@@ -103,11 +113,14 @@ class FirestoreProvider {
             .setData({
           'token': token,
           'createdAt': FieldValue.serverTimestamp(), // optional
+          'lastActivityAt': FieldValue.serverTimestamp(),
         });
   }
 
   Stream<QuerySnapshot> chatList(String currentUserId) {
-    return _firestore.collection("chats").where('users', arrayContains: currentUserId).snapshots();
+    return _firestore.collection("chats")
+        .where('users', arrayContains: currentUserId)
+        .orderBy('lastActivityAt').snapshots();
   }
 
   Future<DocumentSnapshot> getUser(String userId) {
