@@ -41,17 +41,11 @@ class ChatListState extends State<ChatList>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-//        preferredSize: Size(null, 30),
+        elevation: 0.0,
       backgroundColor: Colors.white,
         centerTitle: true,
         flexibleSpace: new Container(
           width: MediaQuery.of(context).size.width,
-//          padding: EdgeInsets.only(
-//              left: 20.0,
-//              right: 20.0,
-//              top: 40.0,
-//              bottom: 8.0
-//          ),
           margin: EdgeInsets.only(
             left: 30.0,
             right: 25.0,
@@ -67,7 +61,12 @@ class ChatListState extends State<ChatList>
           ),
         ),
       ),
-      body: ChatListScreen(widget._currentUserUid),
+      body: new Container(
+          decoration: new BoxDecoration(
+            color: Colors.white,
+          ),
+        child: ChatListScreen(widget._currentUserUid),
+      ),
     );
   }
 }

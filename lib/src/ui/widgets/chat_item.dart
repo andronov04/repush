@@ -209,6 +209,7 @@ class _ChatItemState extends State<ChatItemScreen> {
     print(_bloc.activeIndex);
 
     return new Container(
+
       margin: EdgeInsets.only(
         right: 20.0,
         left: 20.0,
@@ -229,6 +230,7 @@ class _ChatItemState extends State<ChatItemScreen> {
           ),
         ],
         child: new Container(
+
           width: MediaQuery.of(context).size.width,
           height: 40.0,
 //        height: MediaQuery.of(context).size.height,
