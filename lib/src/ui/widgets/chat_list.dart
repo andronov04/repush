@@ -32,7 +32,6 @@ class _ChatListState extends State<ChatListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget._currentUserUid);
     return Container(
       alignment: Alignment(0.0, 0.0),
       child:

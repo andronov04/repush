@@ -7,10 +7,7 @@ import '../../../utils.dart';
 class ChatItemScreen extends StatefulWidget {
   final String _currentUserUid;
   final Chat chat;
-
   final int indexChat;
-
-
 
   ChatItemScreen(this._currentUserUid, this.chat, this.indexChat);
 
@@ -40,72 +37,17 @@ class _ChatItemState extends State<ChatItemScreen> {
   @override
   Widget build(BuildContext context) {
     var index = widget.indexChat;
-    var chatActiveIndex = -1;
     var item = widget.chat;
 
-//    return Slidable(
-//      actionPane: SlidableDrawerActionPane(),
-//      actionExtentRatio: 0.25,
-//      child: Container(
-//        color: Colors.white,
-//        child: ListTile(
-//          leading: CircleAvatar(
-//            backgroundColor: Colors.indigoAccent,
-//            child: Text('ss'),
-//            foregroundColor: Colors.white,
-//          ),
-//          title: Text('Tile n°'),
-//          subtitle: Text('SlidableDrawerDelegate'),
-//        ),
-//      ),
-//      actions: <Widget>[
-//        IconSlideAction(
-//          caption: 'Archive',
-//          color: Colors.blue,
-//          icon: Icons.archive,
-////          onTap: () => _showSnackBar('Archive'),
-//        ),
-//        IconSlideAction(
-//          caption: 'Share',
-//          color: Colors.indigo,
-//          icon: Icons.share,
-////          onTap: () => _showSnackBar('Share'),
-//        ),
-//      ],
-//      secondaryActions: <Widget>[
-//        IconSlideAction(
-//          caption: 'More',
-//          color: Colors.black45,
-//          icon: Icons.more_horiz,
-////          onTap: () => _showSnackBar('More'),
-//        ),
-//        IconSlideAction(
-//          caption: 'Delete',
-//          color: Colors.red,
-//          icon: Icons.delete,
-////          onTap: () => _showSnackBar('Delete'),
-//        ),
-//      ],
-//    );
 
     if(item.isPending){
-      print(item.to.id);
-      print(widget._currentUserUid);
-
       // check if i requested to another user
       bool to = item.to.id != widget._currentUserUid;
-      print(to);
 
       return new Container(
         child: Slidable(
           actionPane: SlidableDrawerActionPane(),
           actionExtentRatio: 0.25,
-//          secondaryActions: <Widget>[
-//            IconSlideAction(
-//              caption: 'Delete',
-//              icon: Icons.delete,
-//            ),
-//          ],
           child: new Container(
             margin: EdgeInsets.only(
                 left: 20.0,
@@ -115,10 +57,7 @@ class _ChatItemState extends State<ChatItemScreen> {
             child: new Container(
               width: MediaQuery.of(context).size.width,
               height: 40.0,
-//        height: MediaQuery.of(context).size.height,
-
               child: new Material(
-//          borderRadius: BorderRadius.circular(100.0),
                 child: new Container(
                     child: new Container(
                       padding: EdgeInsets.only(
@@ -189,7 +128,6 @@ class _ChatItemState extends State<ChatItemScreen> {
                                   else{
                                     _bloc.confirmChat(item.id, false);
                                   }
-//                      this.createMessage();
                                   controller.text = '';
                                 },
                               ),
@@ -206,8 +144,6 @@ class _ChatItemState extends State<ChatItemScreen> {
       );
     }
 
-    print(_bloc.activeIndex);
-
     return new Container(
 
       margin: EdgeInsets.only(
@@ -220,7 +156,6 @@ class _ChatItemState extends State<ChatItemScreen> {
         actionExtentRatio: 0.25,
         secondaryActions: <Widget>[
           IconSlideAction(
-//            caption: 'Delete',
             icon: Icons.delete,
             color: Colors.transparent,
             foregroundColor: HexColor(item.useColorChat(widget._currentUserUid)),
@@ -230,93 +165,91 @@ class _ChatItemState extends State<ChatItemScreen> {
           ),
         ],
         child: new Container(
-
           width: MediaQuery.of(context).size.width,
           height: 40.0,
-//        height: MediaQuery.of(context).size.height,
-
           child: new Material(
-//          borderRadius: BorderRadius.circular(100.0),
-            child: new Container(
-                decoration: BoxDecoration(
-                  color: _bloc.activeIndex == index ?
-                  HexColor(item.useColorChat(widget._currentUserUid)).withOpacity(0.25)
-                      : null,
-                  border: Border.all(
-                      width: 2.0,
-                      color: HexColor(item.useColorChat(widget._currentUserUid)).withOpacity(chatActiveIndex == index ? 0.0 : 0.35)
-                  ),
-                  borderRadius: BorderRadius.all(
-                      Radius.circular(150.0) //         <--- border radius here
-                  ),
-                ),
-                child: new Container(
-                  padding: EdgeInsets.all(2.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                          flex: 6,
-                          child: new Container(
-                            padding: EdgeInsets.only(
-                                right: 10.0
-                            ),
-                            child: TextField(
-                              onTap: (){
-                                _bloc.setActiveIndex(index);
-                                setState(() {
-                                  chatActiveIndex = index;
-                                });
-                              },
-                              decoration: new InputDecoration(
-                                contentPadding: EdgeInsets.only(left: 10.0),
-                                hintText: "Type a message",
-                                border: InputBorder.none,
-                              ),
-                              onSubmitted: (String str) {
-                                print(str);
-    //                                text += str;
-                              },
-                              controller: controller,
-                            ),
-                          )
-                      ),
-                      new Container(
-                          padding: EdgeInsets.only(
-                              right: 10.0
-                          ),
-                          child: Text(
-                            item.userNameChat(widget._currentUserUid),
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                      ),
-                      FlatButton(
-                        child: Text(
-                          'PUSH',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontFamily: 'Arial',
-                            fontWeight: FontWeight.w600,
-                          ),
+            child: StreamBuilder(
+                stream: _bloc.activeIndex,
+                builder:
+                (BuildContext context, snapshot){
+                  return new Container(
+                      decoration: BoxDecoration(
+                        color: snapshot.data == index ?
+                        HexColor(item.useColorChat(widget._currentUserUid)).withOpacity(0.25)
+                            : null,
+                        border: Border.all(
+                            width: 2.0,
+                            color: HexColor(item.useColorChat(widget._currentUserUid)).withOpacity(snapshot.data == index ? 0.0 : 0.35)
                         ),
-                        textColor: Colors.white,
-                        color: HexColor(item.useColorChat(widget._currentUserUid)),
-                        shape:
-                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-                        onPressed: () {
-                          print(controller.text);
-                          if(controller.text != ''){
-                            _bloc.createMsg(widget._currentUserUid, item.id, controller.text);
-                          }
-                          controller.text = '';
-                        },
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(150.0) //         <--- border radius here
+                        ),
                       ),
-                    ],
-                  ),
-                )
-            ),
+                      child: new Container(
+                        padding: EdgeInsets.all(2.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
+                                flex: 6,
+                                child: new Container(
+                                  padding: EdgeInsets.only(
+                                      right: 10.0
+                                  ),
+                                  child: TextField(
+                                    onTap: (){
+                                      _bloc.setActiveIndex(index);
+                                    },
+                                    decoration: new InputDecoration(
+                                      contentPadding: EdgeInsets.only(left: 10.0),
+                                      hintText: "Type a message",
+                                      border: InputBorder.none,
+                                    ),
+                                    onSubmitted: (String str) {
+                                      print(str);
+                                      //                                text += str;
+                                    },
+                                    controller: controller,
+                                  ),
+                                )
+                            ),
+                            new Container(
+                                padding: EdgeInsets.only(
+                                    right: 10.0
+                                ),
+                                child: Text(
+                                  item.userNameChat(widget._currentUserUid),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                            ),
+                            FlatButton(
+                              child: Text(
+                                'PUSH',
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontFamily: 'Arial',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              textColor: Colors.white,
+                              color: HexColor(item.useColorChat(widget._currentUserUid)),
+                              shape:
+                              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+                              onPressed: () {
+                                if(controller.text != ''){
+                                  _bloc.createMsg(widget._currentUserUid, item.id, controller.text);
+                                }
+                                controller.text = '';
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                  );
+                }
+            )
           ),
         ),
       ),

@@ -37,9 +37,6 @@ class FirestoreProvider {
           .where('to', isEqualTo: toUserDoc.reference)
           .getDocuments();
 
-      print(chat1.documents);
-      print(chat2.documents);
-
       // ignore: unrelated_type_equality_checks
       if(chat1.documents.isEmpty && chat2.documents.isEmpty){
         return _firestore.collection('chats').document().setData({

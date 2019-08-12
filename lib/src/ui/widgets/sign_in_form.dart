@@ -86,7 +86,6 @@ class SignInFormState extends State<SignInForm> {
         });
 
       });
-      print(_homeScreenText);
     });
   }
 

@@ -13,13 +13,9 @@ class ChatBloc {
 
   Observable<int> get activeIndex => _activeIndex.stream;
 
-
   void setActiveIndex(int index) {
-    print('setactiveindex');
     _activeIndex.add(index);
   }
-
-
 
   void submit(String email) {
 
@@ -37,13 +33,7 @@ class ChatBloc {
 
   Stream<QuerySnapshot> chatList(String currentUserId) {
     return _repository.chatList(currentUserId).asyncMap((snap) async  {
-      // Mapping to and from
       int index = 0;
-
-//      snap.documents.forEach((DocumentSnapshot doc){
-//        print(doc.documentID);
-//      });
-
       await Future.wait(snap.documents.map((doc) async {
         DocumentSnapshot fr = await getUser(doc['from'].documentID);
         doc.data['from'] = fr.data;
@@ -72,9 +62,6 @@ class ChatBloc {
     return _repository.createChat(currentUserId, toUser);
   }
 
-//  Stream<QuerySnapshot> othersGoalList() {
-//    return _repository.othersGoalList();
-//  }
 
   //dispose all open sink
   void dispose() async {
@@ -106,8 +93,6 @@ class ChatBloc {
 
       chatList.add(chat);
     });
-
-    print('EndList');
 
     chatList.sort((Chat a, Chat b){
       return b.lastActivityAt.compareTo(a.lastActivityAt);

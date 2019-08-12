@@ -66,7 +66,9 @@ class AddUserHeaderState extends State<AddUserHeaderScreen> {
                     style: TextStyle(
                       fontSize: 12.0
                     ),
-                    onTap: (){},
+                    onTap: (){
+                      _bloc.setActiveIndex(-1);
+                    },
                     decoration: new InputDecoration(
                       contentPadding: EdgeInsets.only(left: 5.0),
                       hintText: "Enter ID to add",

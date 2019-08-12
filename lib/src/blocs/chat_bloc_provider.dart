@@ -9,7 +9,6 @@ class ChatBlocProvider extends InheritedWidget{
   bool updateShouldNotify(_) => true;
 
   static ChatBloc of(BuildContext context) {
-    print(ChatBlocProvider);
     return (context.inheritFromWidgetOfExactType(ChatBlocProvider) as ChatBlocProvider).bloc;
   }
 }

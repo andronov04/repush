@@ -47,7 +47,6 @@ class UserHeaderState extends State<UserHeaderScreen> {
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data!=null) {
-                    print(snapshot.data);
                     return Text(snapshot.data['nickUid'].toString(),
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
