@@ -41,6 +41,7 @@ class _ChatListState extends State<ChatListScreen> {
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasData) {
               QuerySnapshot docs = snapshot.data;
+              print(docs.documents);
               List<Chat> chatList = _bloc.mapToList(docs: docs);
 
               return buildList(chatList);

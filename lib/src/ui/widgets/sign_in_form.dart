@@ -40,7 +40,8 @@ class SignInFormState extends State<SignInForm> {
     print('currentUser');
     _bloc.currentAuthUser().then((FirebaseUser user) {
       // ignore: unrelated_type_equality_checks
-      if (user != Null) {
+      print(user.uid);
+      if (user != null) {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -130,7 +131,7 @@ class SignInFormState extends State<SignInForm> {
   void authenticateUser() {
     _bloc.showProgressBar(true);
     _bloc.submit().then((value) {
-      if (value != Null) {
+      if (value != null) {
 
         if(_token != ''){
           _bloc.setTokenToUser(value, _token);
