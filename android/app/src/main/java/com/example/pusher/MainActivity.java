@@ -1,4 +1,4 @@
-package com.example.pusher;
+package io.repush.repush;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
